@@ -320,6 +320,11 @@ updateCooldown(cooldownMs, false);
 updateVolume(volumePercent, false);
 render();
 
+if (window.innerWidth >= 900) {
+  document.getElementById('adv-panel').classList.add('open');
+  document.getElementById('adv-toggle-icon').textContent = '▶';
+}
+
 // 固定卷軸欄：主面板離開視野時顯示
 const stickyBar = document.getElementById('sticky-scroll-bar');
 new IntersectionObserver(entries => {
