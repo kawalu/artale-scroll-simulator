@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>卷軸機率模擬器</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <h1>📜 卷軸機率模擬器</h1>
+
+  <!-- 選擇面板 -->
+  <div class="panel">
+    <div class="select-label">選擇機率：<span id="rate-display" class="rate-color-10">10%</span></div>
+
+    <div class="scroll-list">
+      <div class="scroll-item" id="item-1" onmouseenter="playHover()" onclick="playClick(); selectScroll(1)" oncontextmenu="return false">
+        <img src="images/scroll1.png" alt="" draggable="false">
+        <span class="item-rate">1%</span>
+      </div>
+      <div class="scroll-item" id="item-5" onmouseenter="playHover()" onclick="playClick(); selectScroll(5)" oncontextmenu="return false">
+        <img src="images/scroll5.png" alt="" draggable="false">
+        <span class="item-rate">5%</span>
+      </div>
+      <div class="scroll-item selected" id="item-10" onmouseenter="playHover()" onclick="playClick(); selectScroll(10)" oncontextmenu="return false">
+        <img src="images/scroll10.png" alt="" draggable="false">
+        <span class="item-rate">10%</span>
+      </div>
+      <div class="scroll-item" id="item-15" onmouseenter="playHover()" onclick="playClick(); selectScroll(15)" oncontextmenu="return false">
+        <img src="images/scroll15.png" alt="" draggable="false">
+        <span class="item-rate">15%</span>
+      </div>
+      <div class="scroll-item" id="item-20" onmouseenter="playHover()" onclick="playClick(); selectScroll(20)" oncontextmenu="return false">
+        <img src="images/scroll20.png" alt="" draggable="false">
+        <span class="item-rate">20%</span>
+      </div>
+      <div class="scroll-item" id="item-30" onmouseenter="playHover()" onclick="playClick(); selectScroll(30)" oncontextmenu="return false">
+        <img src="images/scroll30.png" alt="" draggable="false">
+        <span class="item-rate">30%</span>
+      </div>
+      <div class="scroll-item" id="item-60" onmouseenter="playHover()" onclick="playClick(); selectScroll(60)" oncontextmenu="return false">
+        <img src="images/scroll60.png" alt="" draggable="false">
+        <span class="item-rate">60%</span>
+      </div>
+      <div class="scroll-item" id="item-65" onmouseenter="playHover()" onclick="playClick(); selectScroll(65)" oncontextmenu="return false">
+        <img src="images/scroll65.png" alt="" draggable="false">
+        <span class="item-rate">65%</span>
+      </div>
+      <div class="scroll-item" id="item-70" onmouseenter="playHover()" onclick="playClick(); selectScroll(70)" oncontextmenu="return false">
+        <img src="images/scroll70.png" alt="" draggable="false">
+        <span class="item-rate">70%</span>
+      </div>
+    </div>
+
+    <div class="warn-text" id="warn-text">　</div>
+
+    <button class="go-btn" id="go-btn" onmouseenter="playHover()" onclick="playClick(); roll()">
+      使用
+      <span class="cooldown-bar" id="cooldown-bar" style="width:0%"></span>
+    </button>
+
+    <div class="panel-sep"></div>
+
+    <div class="card-toggle-section">
+      <div class="card-toggle-header">
+        <div class="card-toggle-title">顯示紀錄卡片</div>
+        <button class="toggle-all-btn" onmouseenter="playHover()" onclick="playClick(); uncheckAll()">全部取消</button>
+        <span class="info-tip">ⓘ<span class="info-tip-text">使用中的卷軸卡片無法隱藏</span></span>
+      </div>
+      <div class="card-toggle-grid">
+        <label class="card-toggle-item"><input type="checkbox" id="chk-1"  onchange="onCheckboxChange(1, this)"><span class="rate-color-1">1%</span></label>
+        <label class="card-toggle-item"><input type="checkbox" id="chk-5"  onchange="onCheckboxChange(5, this)"><span class="rate-color-5">5%</span></label>
+        <label class="card-toggle-item"><input type="checkbox" id="chk-10" onchange="onCheckboxChange(10, this)" checked><span class="rate-color-10">10%</span></label>
+        <label class="card-toggle-item"><input type="checkbox" id="chk-15" onchange="onCheckboxChange(15, this)"><span class="rate-color-15">15%</span></label>
+        <label class="card-toggle-item"><input type="checkbox" id="chk-20" onchange="onCheckboxChange(20, this)"><span class="rate-color-20">20%</span></label>
+        <label class="card-toggle-item"><input type="checkbox" id="chk-30" onchange="onCheckboxChange(30, this)"><span class="rate-color-30">30%</span></label>
+        <label class="card-toggle-item"><input type="checkbox" id="chk-60" onchange="onCheckboxChange(60, this)"><span class="rate-color-60">60%</span></label>
+        <label class="card-toggle-item"><input type="checkbox" id="chk-65" onchange="onCheckboxChange(65, this)"><span class="rate-color-65">65%</span></label>
+        <label class="card-toggle-item"><input type="checkbox" id="chk-70" onchange="onCheckboxChange(70, this)"><span class="rate-color-70">70%</span></label>
+      </div>
+    </div>
+  </div>
+
+  <!-- 統計 + 紀錄 -->
+  <div class="stats-wrap">
+    <div class="stat-card" id="card-1">
+      <div class="stat-card-title rate-color-1">1% 卷軸</div>
+      <div class="counts">
+        <div class="count-block"><span class="count-label">成功</span><span class="count-num s" id="s1">0</span></div>
+        <div class="count-block"><span class="count-label">失敗</span><span class="count-num f" id="f1">0</span></div>
+        <div class="count-block"><span class="count-label">摧毀</span><span class="count-num d" id="d1">0</span></div>
+      </div>
+      <div class="real-rate">實際成功率：<span id="r1">—</span></div>
+      <div class="card-divider"></div>
+      <div class="record-row"><span class="record-label">連續成功</span><span class="record-val s" id="streak-s1">0</span></div>
+      <div class="record-row"><span class="record-label">連續失敗</span><span class="record-val f" id="streak-f1">0</span></div>
+      <div class="record-row"><span class="record-label">累計成功</span><span class="record-val s" id="total-s1">0</span></div>
+      <div class="record-row"><span class="record-label">累計失敗</span><span class="record-val f" id="total-f1">0</span></div>
+      <button class="reset-btn" onmouseenter="playHover()" onclick="playClick(); resetScroll(1)">🔄 重置</button>
+    </div>
+
+    <div class="stat-card" id="card-5">
+      <div class="stat-card-title rate-color-5">5% 卷軸</div>
+      <div class="counts">
+        <div class="count-block"><span class="count-label">成功</span><span class="count-num s" id="s5">0</span></div>
+        <div class="count-block"><span class="count-label">失敗</span><span class="count-num f" id="f5">0</span></div>
+        <div class="count-block"><span class="count-label">摧毀</span><span class="count-num d" id="d5">0</span></div>
+      </div>
+      <div class="real-rate">實際成功率：<span id="r5">—</span></div>
+      <div class="card-divider"></div>
+      <div class="record-row"><span class="record-label">連續成功</span><span class="record-val s" id="streak-s5">0</span></div>
+      <div class="record-row"><span class="record-label">連續失敗</span><span class="record-val f" id="streak-f5">0</span></div>
+      <div class="record-row"><span class="record-label">累計成功</span><span class="record-val s" id="total-s5">0</span></div>
+      <div class="record-row"><span class="record-label">累計失敗</span><span class="record-val f" id="total-f5">0</span></div>
+      <button class="reset-btn" onmouseenter="playHover()" onclick="playClick(); resetScroll(5)">🔄 重置</button>
+    </div>
+
+    <div class="stat-card active" id="card-10">
+      <div class="stat-card-title rate-color-10">10% 卷軸</div>
+      <div class="counts">
+        <div class="count-block">
+          <span class="count-label">成功</span>
+          <span class="count-num s" id="s10">0</span>
+        </div>
+        <div class="count-block">
+          <span class="count-label">失敗</span>
+          <span class="count-num f" id="f10">0</span>
+        </div>
+      </div>
+      <div class="real-rate">實際成功率：<span id="r10">—</span></div>
+      <div class="card-divider"></div>
+      <div class="record-row"><span class="record-label">連續成功</span><span class="record-val s" id="streak-s10">0</span>
+      </div>
+      <div class="record-row"><span class="record-label">連續失敗</span><span class="record-val f" id="streak-f10">0</span>
+      </div>
+      <div class="record-row"><span class="record-label">累計成功</span><span class="record-val s" id="total-s10">0</span>
+      </div>
+      <div class="record-row"><span class="record-label">累計失敗</span><span class="record-val f" id="total-f10">0</span>
+      </div>
+      <button class="reset-btn" onmouseenter="playHover()" onclick="playClick(); resetScroll(10)">🔄 重置</button>
+    </div>
+
+    <div class="stat-card" id="card-15">
+      <div class="stat-card-title rate-color-15">15% 卷軸</div>
+      <div class="counts">
+        <div class="count-block"><span class="count-label">成功</span><span class="count-num s" id="s15">0</span></div>
+        <div class="count-block"><span class="count-label">失敗</span><span class="count-num f" id="f15">0</span></div>
+      </div>
+      <div class="real-rate">實際成功率：<span id="r15">—</span></div>
+      <div class="card-divider"></div>
+      <div class="record-row"><span class="record-label">連續成功</span><span class="record-val s" id="streak-s15">0</span></div>
+      <div class="record-row"><span class="record-label">連續失敗</span><span class="record-val f" id="streak-f15">0</span></div>
+      <div class="record-row"><span class="record-label">累計成功</span><span class="record-val s" id="total-s15">0</span></div>
+      <div class="record-row"><span class="record-label">累計失敗</span><span class="record-val f" id="total-f15">0</span></div>
+      <button class="reset-btn" onmouseenter="playHover()" onclick="playClick(); resetScroll(15)">🔄 重置</button>
+    </div>
+
+    <div class="stat-card" id="card-20">
+      <div class="stat-card-title rate-color-20">20% 卷軸</div>
+      <div class="counts">
+        <div class="count-block"><span class="count-label">成功</span><span class="count-num s" id="s20">0</span></div>
+        <div class="count-block"><span class="count-label">摧毀</span><span class="count-num d" id="d20">0</span></div>
+      </div>
+      <div class="real-rate">實際成功率：<span id="r20">—</span></div>
+      <div class="card-divider"></div>
+      <div class="record-row"><span class="record-label">連續成功</span><span class="record-val s" id="streak-s20">0</span></div>
+      <div class="record-row"><span class="record-label">連續失敗</span><span class="record-val f" id="streak-f20">0</span></div>
+      <div class="record-row"><span class="record-label">累計成功</span><span class="record-val s" id="total-s20">0</span></div>
+      <div class="record-row"><span class="record-label">累計失敗</span><span class="record-val f" id="total-f20">0</span></div>
+      <button class="reset-btn" onmouseenter="playHover()" onclick="playClick(); resetScroll(20)">🔄 重置</button>
+    </div>
+
+    <div class="stat-card" id="card-30">
+      <div class="stat-card-title rate-color-30">30% 卷軸</div>
+      <div class="counts">
+        <div class="count-block">
+          <span class="count-label">成功</span>
+          <span class="count-num s" id="s30">0</span>
+        </div>
+        <div class="count-block">
+          <span class="count-label">失敗</span>
+          <span class="count-num f" id="f30">0</span>
+        </div>
+        <div class="count-block">
+          <span class="count-label">摧毀</span>
+          <span class="count-num d" id="d30">0</span>
+        </div>
+      </div>
+      <div class="real-rate">實際成功率：<span id="r30">—</span></div>
+      <div class="card-divider"></div>
+      <div class="record-row"><span class="record-label">連續成功</span><span class="record-val s" id="streak-s30">0</span>
+      </div>
+      <div class="record-row"><span class="record-label">連續失敗</span><span class="record-val f" id="streak-f30">0</span>
+      </div>
+      <div class="record-row"><span class="record-label">累計成功</span><span class="record-val s" id="total-s30">0</span>
+      </div>
+      <div class="record-row"><span class="record-label">累計失敗</span><span class="record-val f" id="total-f30">0</span>
+      </div>
+      <button class="reset-btn" onmouseenter="playHover()" onclick="playClick(); resetScroll(30)">🔄 重置</button>
+    </div>
+
+    <div class="stat-card" id="card-60">
+      <div class="stat-card-title rate-color-60">60% 卷軸</div>
+      <div class="counts">
+        <div class="count-block">
+          <span class="count-label">成功</span>
+          <span class="count-num s" id="s60">0</span>
+        </div>
+        <div class="count-block">
+          <span class="count-label">失敗</span>
+          <span class="count-num f" id="f60">0</span>
+        </div>
+      </div>
+      <div class="real-rate">實際成功率：<span id="r60">—</span></div>
+      <div class="card-divider"></div>
+      <div class="record-row"><span class="record-label">連續成功</span><span class="record-val s" id="streak-s60">0</span>
+      </div>
+      <div class="record-row"><span class="record-label">連續失敗</span><span class="record-val f" id="streak-f60">0</span>
+      </div>
+      <div class="record-row"><span class="record-label">累計成功</span><span class="record-val s" id="total-s60">0</span>
+      </div>
+      <div class="record-row"><span class="record-label">累計失敗</span><span class="record-val f" id="total-f60">0</span>
+      </div>
+      <button class="reset-btn" onmouseenter="playHover()" onclick="playClick(); resetScroll(60)">🔄 重置</button>
+    </div>
+
+    <div class="stat-card" id="card-65">
+      <div class="stat-card-title rate-color-65">65% 卷軸</div>
+      <div class="counts">
+        <div class="count-block"><span class="count-label">成功</span><span class="count-num s" id="s65">0</span></div>
+        <div class="count-block"><span class="count-label">失敗</span><span class="count-num f" id="f65">0</span></div>
+      </div>
+      <div class="real-rate">實際成功率：<span id="r65">—</span></div>
+      <div class="card-divider"></div>
+      <div class="record-row"><span class="record-label">連續成功</span><span class="record-val s" id="streak-s65">0</span></div>
+      <div class="record-row"><span class="record-label">連續失敗</span><span class="record-val f" id="streak-f65">0</span></div>
+      <div class="record-row"><span class="record-label">累計成功</span><span class="record-val s" id="total-s65">0</span></div>
+      <div class="record-row"><span class="record-label">累計失敗</span><span class="record-val f" id="total-f65">0</span></div>
+      <button class="reset-btn" onmouseenter="playHover()" onclick="playClick(); resetScroll(65)">🔄 重置</button>
+    </div>
+
+    <div class="stat-card" id="card-70">
+      <div class="stat-card-title rate-color-70">70% 卷軸</div>
+      <div class="counts">
+        <div class="count-block">
+          <span class="count-label">成功</span>
+          <span class="count-num s" id="s70">0</span>
+        </div>
+        <div class="count-block">
+          <span class="count-label">失敗</span>
+          <span class="count-num f" id="f70">0</span>
+        </div>
+        <div class="count-block">
+          <span class="count-label">摧毀</span>
+          <span class="count-num d" id="d70">0</span>
+        </div>
+      </div>
+      <div class="real-rate">實際成功率：<span id="r70">—</span></div>
+      <div class="card-divider"></div>
+      <div class="record-row"><span class="record-label">連續成功</span><span class="record-val s" id="streak-s70">0</span>
+      </div>
+      <div class="record-row"><span class="record-label">連續失敗</span><span class="record-val f" id="streak-f70">0</span>
+      </div>
+      <div class="record-row"><span class="record-label">累計成功</span><span class="record-val s" id="total-s70">0</span>
+      </div>
+      <div class="record-row"><span class="record-label">累計失敗</span><span class="record-val f" id="total-f70">0</span>
+      </div>
+      <button class="reset-btn" onmouseenter="playHover()" onclick="playClick(); resetScroll(70)">🔄 重置</button>
+    </div>
+  </div>
+
+  <!-- 總計 -->
+  <div class="record-card">
+    <div class="record-title">📊 總計</div>
+    <div class="record-row"><span class="record-label">總成功次數</span><span class="record-val s" id="grand-s">0</span>
+    </div>
+    <div class="record-row"><span class="record-label">總失敗次數</span><span class="record-val f" id="grand-f">0</span>
+    </div>
+    <div class="record-row"><span class="record-label">總使用次數</span><span class="record-val" id="grand-t">0</span></div>
+    <div class="record-row"><span class="record-label">整體成功率</span><span class="record-val" id="grand-r">—</span></div>
+    <button class="reset-btn reset-all-btn" onmouseenter="playHover()" onclick="playClick(); resetAll()">全部重置</button>
+  </div>
+
+  <!-- 進階設定右側面板 -->
+  <div class="adv-panel" id="adv-panel">
+    <button class="adv-panel-toggle" onclick="toggleAdvPanel()" title="進階設定">
+      <span id="adv-toggle-icon">◀</span>
+    </button>
+    <div class="adv-panel-content">
+      <div class="advanced-title">🔧 進階設定</div>
+      <div class="adv-row">
+        <div class="adv-row-header">
+          <span class="adv-label">點擊冷卻時間</span>
+          <span class="adv-value" id="cooldown-val">600 ms</span>
+        </div>
+        <input class="adv-slider" type="range" id="cooldown-slider" min="0" max="600" step="50" value="600"
+          oninput="updateCooldown(this.value)">
+      </div>
+      <div class="adv-row">
+        <div class="adv-row-header">
+          <span class="adv-label">音效音量</span>
+          <span class="adv-value" id="volume-val">100%</span>
+        </div>
+        <input class="adv-slider" type="range" id="volume-slider" min="0" max="100" step="1" value="100"
+          oninput="updateVolume(this.value)">
+      </div>
+    </div>
+  </div>
+
+  <!-- 固定卷軸選擇欄 -->
+  <div class="sticky-scroll-bar" id="sticky-scroll-bar">
+    <div class="sticky-scroll-item" id="sticky-item-1" onmouseenter="playHover()" onclick="playClick(); selectScroll(1)" oncontextmenu="return false">
+      <img src="images/scroll1.png" alt="" draggable="false">
+      <span class="sticky-item-rate">1%</span>
+    </div>
+    <div class="sticky-scroll-item" id="sticky-item-5" onmouseenter="playHover()" onclick="playClick(); selectScroll(5)" oncontextmenu="return false">
+      <img src="images/scroll5.png" alt="" draggable="false">
+      <span class="sticky-item-rate">5%</span>
+    </div>
+    <div class="sticky-scroll-item selected" id="sticky-item-10" onmouseenter="playHover()" onclick="playClick(); selectScroll(10)" oncontextmenu="return false">
+      <img src="images/scroll10.png" alt="" draggable="false">
+      <span class="sticky-item-rate">10%</span>
+    </div>
+    <div class="sticky-scroll-item" id="sticky-item-15" onmouseenter="playHover()" onclick="playClick(); selectScroll(15)" oncontextmenu="return false">
+      <img src="images/scroll15.png" alt="" draggable="false">
+      <span class="sticky-item-rate">15%</span>
+    </div>
+    <div class="sticky-scroll-item" id="sticky-item-20" onmouseenter="playHover()" onclick="playClick(); selectScroll(20)" oncontextmenu="return false">
+      <img src="images/scroll20.png" alt="" draggable="false">
+      <span class="sticky-item-rate">20%</span>
+    </div>
+    <div class="sticky-scroll-item" id="sticky-item-30" onmouseenter="playHover()" onclick="playClick(); selectScroll(30)" oncontextmenu="return false">
+      <img src="images/scroll30.png" alt="" draggable="false">
+      <span class="sticky-item-rate">30%</span>
+    </div>
+    <div class="sticky-scroll-item" id="sticky-item-60" onmouseenter="playHover()" onclick="playClick(); selectScroll(60)" oncontextmenu="return false">
+      <img src="images/scroll60.png" alt="" draggable="false">
+      <span class="sticky-item-rate">60%</span>
+    </div>
+    <div class="sticky-scroll-item" id="sticky-item-65" onmouseenter="playHover()" onclick="playClick(); selectScroll(65)" oncontextmenu="return false">
+      <img src="images/scroll65.png" alt="" draggable="false">
+      <span class="sticky-item-rate">65%</span>
+    </div>
+    <div class="sticky-scroll-item" id="sticky-item-70" onmouseenter="playHover()" onclick="playClick(); selectScroll(70)" oncontextmenu="return false">
+      <img src="images/scroll70.png" alt="" draggable="false">
+      <span class="sticky-item-rate">70%</span>
+    </div>
+    <div class="sticky-divider"></div>
+    <button class="sticky-go-btn" id="sticky-go-btn" onmouseenter="playHover()" onclick="playClick(); roll()">
+      使用
+      <span class="cooldown-bar" id="sticky-cooldown-bar" style="width:0%"></span>
+    </button>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
