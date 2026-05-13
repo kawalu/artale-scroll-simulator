@@ -776,8 +776,8 @@ h1 {
   }
 
   /* 進階設定面板 */
-  .adv-panel { right: -252px; }
-  .adv-panel.open { right: 0; }
+  .adv-panel { right: -252px !important; }
+  .adv-panel.open { right: 0 !important; }
   .adv-panel-content { width: 252px; }
 
   /* 固定卷軸欄：全寬 + 橫向捲動 */
@@ -875,9 +875,8 @@ h1 {
     min-width: 0;
   }
 
-  .adv-panel {
-    right: -260px;
-  }
+  .adv-panel { right: -260px !important; }
+  .adv-panel.open { right: 0 !important; }
 
   .adv-panel-content {
     width: 260px;

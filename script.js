@@ -304,6 +304,7 @@ function loadState() {
       document.getElementById(`chk-${rate}`).checked = visible;
       document.getElementById(`card-${rate}`).classList.toggle('active', visible);
       document.getElementById(`item-${rate}`).classList.toggle('selected', rate === selected);
+      document.getElementById(`sticky-item-${rate}`).classList.toggle('selected', rate === selected);
     }
 
     updateDisplay(selected);
